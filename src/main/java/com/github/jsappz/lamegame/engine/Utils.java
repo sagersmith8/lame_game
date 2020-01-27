@@ -1,6 +1,9 @@
 package com.github.jsappz.lamegame.engine;
 
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Scanner;
 
 public class Utils {
@@ -11,5 +14,9 @@ public class Utils {
             result = scanner.useDelimiter("\\A").next();
         }
         return result;
+    }
+
+    public static List<String> readAllLines(Path path) throws Exception {
+        return Files.readAllLines(path);
     }
 }

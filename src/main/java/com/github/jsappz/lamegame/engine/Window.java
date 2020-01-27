@@ -87,6 +87,8 @@ public class Window {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glEnable(GL_DEPTH_TEST);
+        //used to see all individual triangles in a model
+//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
 
     public long getWindowHandle() {

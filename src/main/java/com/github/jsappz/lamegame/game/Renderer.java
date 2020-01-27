@@ -3,14 +3,13 @@ package com.github.jsappz.lamegame.game;
 import com.github.jsappz.lamegame.engine.GameItem;
 import com.github.jsappz.lamegame.engine.Utils;
 import com.github.jsappz.lamegame.engine.Window;
-import com.github.jsappz.lamegame.engine.graph.Camera;
-import com.github.jsappz.lamegame.engine.graph.ShaderProgram;
-import com.github.jsappz.lamegame.engine.graph.Transformation;
+import com.github.jsappz.lamegame.engine.graph.*;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import static org.lwjgl.opengl.GL11.*;
 public class Renderer {
-    private ShaderProgram shaderProgram;
     /**
      * Field of View in Radians
      */
@@ -20,9 +19,12 @@ public class Renderer {
     private static final float Z_FAR = 1000.f;
 
     private final Transformation transformation;
+    private float specularPower;
+    private ShaderProgram shaderProgram;
 
     public Renderer() {
         transformation = new Transformation();
+        specularPower = 10f;
     }
 
     public void init(Window window) throws Exception {
@@ -35,15 +37,20 @@ public class Renderer {
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("modelViewMatrix");
         shaderProgram.createUniform("texture_sampler");
-
-        window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        // Create uniform for material
+        shaderProgram.createMaterialUniform("material");
+        // Create lighting related uniforms
+        shaderProgram.createUniform("specularPower");
+        shaderProgram.createUniform("ambientLight");
+        shaderProgram.createPointLightUniform("pointLight");
     }
 
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, GameItem[] gameItems) {
+    public void render(Window window, Camera camera, GameItem[] gameItems, Vector3f ambientLight,
+                       PointLight pointLight) {
         clear();
 
         if ( window.isResized() ) {
@@ -59,15 +66,31 @@ public class Renderer {
         // Update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 
+        // Update Light Uniforms
+        shaderProgram.setUniform("ambientLight", ambientLight);
+        shaderProgram.setUniform("specularPower", specularPower);
+        // Get a copy of the light object and transform its position to view coordinates
+        PointLight currPointLight = new PointLight(pointLight);
+        Vector3f lightPos = currPointLight.getPosition();
+        Vector4f aux = new Vector4f(lightPos, 1);
+        aux.mul(viewMatrix);
+        lightPos.x = aux.x;
+        lightPos.y = aux.y;
+        lightPos.z = aux.z;
+        shaderProgram.setUniform("pointLight", currPointLight);
+
+
         shaderProgram.setUniform("texture_sampler", 0);
 
         // Render each gameItem
         for (GameItem gameItem : gameItems) {
+            Mesh mesh = gameItem.getMesh();
             // Set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            // Render the mes for this game item
-            gameItem.getMesh().render();
+            // Render the mesh for this game item
+            shaderProgram.setUniform("material", mesh.getMaterial());
+            mesh.render();
         }
 
         shaderProgram.unbind();
