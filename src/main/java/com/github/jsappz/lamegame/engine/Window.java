@@ -89,6 +89,10 @@ public class Window {
         glEnable(GL_DEPTH_TEST);
         //used to see all individual triangles in a model
 //        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+        // Support for transparency
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public long getWindowHandle() {
