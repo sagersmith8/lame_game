@@ -1,0 +1,75 @@
+plugins {
+    id 'com.gorylenko.gradle-git-properties' version '1.4.16'
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+def depsDirName = 'libs'
+def depsDir = '$libsDir/$depsDirName'
+def generatedSrcDir = '$buildDir/generated/source/apt/main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    compile libraries.logback
+
+    testCompile libraries.hamcrest
+    testCompile libraries.junit
+    testCompile libraries.mockito
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava {
+    options.annotationProcessorGeneratedSourcesDirectory file(generatedSrcDir)
+}
+
+task syncDependencies(type: Sync) {
+    from configurations.runtime
+    into depsDir
+}
+assemble.dependsOn syncDependencies
+
+jar {
+    baseName = 'lame-game-server'
+    archiveName = '${baseName}.jar'
+
+    manifest {
+        attributes(
+                "Main-Class": 'com.github.jsappz.lamegame.server.boot',
+                "Class-Path": configurations.runtime.files.collect { "$depsDirName/$it.name" }.join(' '),
+                "Implementation-Title": baseName,
+                "Implementation-Version": version,
+        )
+    }
+}
+
+gitProperties {
+    dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    dateFormatTimeZone = "CST"
+    keys = gitPropertyKeys
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+    }
+}
+check.dependsOn jacocoTestReport
+
+idea {
+    module {
+        sourceDirs += file(generatedSrcDir)
+        generatedSourceDirs += file(generatedSrcDir)
+    }
+}

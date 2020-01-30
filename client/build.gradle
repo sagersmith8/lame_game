@@ -1,0 +1,87 @@
+plugins {
+    id 'com.gorylenko.gradle-git-properties' version '1.4.16'
+    id 'application'
+}
+application {
+    mainClassName = 'com.github.jsappz.lamegame.game.Main'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation libraries.joml
+    implementation platform(libraries.lwjgl_bom)
+    implementation implementations.lwjgl
+    implementation implementations.lwjgl_assimp
+    implementation implementations.lwjgl_bgfx
+    implementation implementations.lwjgl_cuda
+    implementation implementations.lwjgl_egl
+    implementation implementations.lwjgl_glfw
+    implementation implementations.lwjgl_jawt
+    implementation implementations.lwjgl_jemalloc
+    implementation implementations.lwjgl_libdivide
+    implementation implementations.lwjgl_llvm
+    implementation implementations.lwjgl_lmdb
+    implementation implementations.lwjgl_lz4
+    implementation implementations.lwjgl_meow
+    implementation implementations.lwjgl_nanovg
+    implementation implementations.lwjgl_nfd
+    implementation implementations.lwjgl_nuklear
+    implementation implementations.lwjgl_odbc
+    implementation implementations.lwjgl_openal
+    implementation implementations.lwjgl_opencl
+    implementation implementations.lwjgl_opengl
+    implementation implementations.lwjgl_opengles
+    implementation implementations.lwjgl_openvr
+    implementation implementations.lwjgl_opus
+    implementation implementations.lwjgl_ovr
+    implementation implementations.lwjgl_par
+    implementation implementations.lwjgl_remotery
+    implementation implementations.lwjgl_rpmalloc
+    implementation implementations.lwjgl_shaderc
+    implementation implementations.lwjgl_sse
+    implementation implementations.lwjgl_stb
+    implementation implementations.lwjgl_tinyexr
+    implementation implementations.lwjgl_tinyfd
+    implementation implementations.lwjgl_tootle
+    implementation implementations.lwjgl_vma
+    implementation implementations.lwjgl_vulkan
+    implementation implementations.lwjgl_xxhash
+    implementation implementations.lwjgl_yoga
+    implementation implementations.lwjgl_zstd
+
+    runtimeOnly libraries.lwjgl
+    runtimeOnly libraries.lwjgl_assimp
+    runtimeOnly libraries.lwjgl_bgfx
+    runtimeOnly libraries.lwjgl_glfw
+    runtimeOnly libraries.lwjgl_jemalloc
+    runtimeOnly libraries.lwjgl_libdivide
+    runtimeOnly libraries.lwjgl_llvm
+    runtimeOnly libraries.lwjgl_lmdb
+    runtimeOnly libraries.lwjgl_lz4
+    runtimeOnly libraries.lwjgl_meow
+    runtimeOnly libraries.lwjgl_nanovg
+    runtimeOnly libraries.lwjgl_nfd
+    runtimeOnly libraries.lwjgl_nuklear
+    runtimeOnly libraries.lwjgl_openal
+    runtimeOnly libraries.lwjgl_opengl
+    runtimeOnly libraries.lwjgl_opengles
+    runtimeOnly libraries.lwjgl_openvr
+    runtimeOnly libraries.lwjgl_opus
+    runtimeOnly libraries.lwjgl_ovr
+    runtimeOnly libraries.lwjgl_par
+    runtimeOnly libraries.lwjgl_remotery
+    runtimeOnly libraries.lwjgl_rpmalloc
+    runtimeOnly libraries.lwjgl_shaderc
+    runtimeOnly libraries.lwjgl_sse
+    runtimeOnly libraries.lwjgl_stb
+    runtimeOnly libraries.lwjgl_tinyexr
+    runtimeOnly libraries.lwjgl_tinyfd
+    runtimeOnly libraries.lwjgl_tootle
+    runtimeOnly libraries.lwjgl_vma
+    runtimeOnly libraries.lwjgl_xxhash
+    runtimeOnly libraries.lwjgl_yoga
+    runtimeOnly libraries.lwjgl_zstd
+}

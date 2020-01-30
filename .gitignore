@@ -7,6 +7,9 @@ build
 out
 gradle
 
+# spring-boot
+*/$buildDir
+
 # intellij
 .idea
 
