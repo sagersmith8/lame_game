@@ -4,25 +4,16 @@ package com.github.jsappz.lamegame.engine.graph;
 import org.joml.Vector4f;
 
 public class Material {
-
     private static final Vector4f DEFAULT_COLOR = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     private Vector4f ambientColor;
-
     private Vector4f diffuseColor;
-
     private Vector4f specularColor;
-
     private float reflectance;
-
     private Texture texture;
 
     public Material() {
-        this.ambientColor = DEFAULT_COLOR;
-        this.diffuseColor = DEFAULT_COLOR;
-        this.specularColor = DEFAULT_COLOR;
-        this.texture = null;
-        this.reflectance = 0;
+        this(DEFAULT_COLOR, DEFAULT_COLOR, DEFAULT_COLOR, null, 0);
     }
 
     public Material(Vector4f Color, float reflectance) {
