@@ -3,13 +3,9 @@ import com.github.jsappz.lamegame.engine.graph.Mesh;
 import org.joml.Vector3f;
 
 public class GameItem {
-
     private Mesh mesh;
-
     private final Vector3f position;
-
     private float scale;
-
     private final Vector3f rotation;
 
     public GameItem() {

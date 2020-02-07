@@ -7,6 +7,8 @@ import org.joml.Vector3f;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -18,12 +20,9 @@ public class DummyGame implements GameLogic {
     private final Vector3f cameraInc;
     private final Renderer renderer;
     private final Camera camera;
-    private GameItem[] gameItems;
-    private SceneLight sceneLight;
+    private Scene scene;
     private Hud hud;
     private float lightAngle;
-    private float spotAngle = 0;
-    private float spotInc = 1;
 
     public DummyGame() {
         renderer = new Renderer();
@@ -34,48 +33,73 @@ public class DummyGame implements GameLogic {
 
     @Override
     public void init(Window window) throws Exception {
-        renderer.init(window);
+        renderer.init();
+        scene = new Scene();
         float reflectance = 1f;
-        Path path = Paths.get(ClassLoader.getSystemResource("textures/grassblock.png").toURI());
-        Texture texture = new Texture(path.toFile().getAbsolutePath());
-        Path obj = Paths.get(ClassLoader.getSystemResource("models/cube.obj").toURI());
+        Mesh mesh = OBJLoader.loadMesh(Paths.get(ClassLoader.getSystemResource("models/cube.obj").toURI()));
+        Texture texture = new Texture(Paths.get(ClassLoader.getSystemResource("textures/grassblock.png").toURI()).toFile().getAbsolutePath());
         Material material = new Material(texture, reflectance);
-        Mesh mesh = OBJLoader.loadMesh(obj);
         mesh.setMaterial(material);
-        GameItem gameItem = new GameItem(mesh);
-        gameItem.setScale(0.5f);
-        gameItem.setPosition(0, 0, -2);
-        gameItems = new GameItem[]{gameItem};
 
-        sceneLight = new SceneLight();
+        float blockScale = 0.5f;
+        float skyBoxScale = 50.0f;
+        float extension = 2.0f;
 
-        // Ambient Light
-        sceneLight.setAmbientLight(new Vector3f(0.3f, 0.3f, 0.3f));
+        float startx = extension * (-skyBoxScale + blockScale);
+        float startz = extension * (skyBoxScale - blockScale);
+        float starty = -1.0f;
+        float inc = blockScale * 2;
 
-        // Point Light
-        Vector3f lightPosition = new Vector3f(0, 0, 1);
-        float lightIntensity = 1.0f;
-        PointLight pointLight = new PointLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity);
-        PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
-        pointLight.setAttenuation(att);
-        sceneLight.setPointLightList(new PointLight[]{pointLight});
+        float posx = startx;
+        float posz = startz;
+        float incy = 0.0f;
+        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
+        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
+        GameItem[] gameItems  = new GameItem[NUM_ROWS * NUM_COLS];
+        for(int i=0; i<NUM_ROWS; i++) {
+            for(int j=0; j<NUM_COLS; j++) {
+                GameItem gameItem = new GameItem(mesh);
+                gameItem.setScale(blockScale);
+                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
+                gameItem.setPosition(posx, starty + incy, posz);
+                gameItems[i*NUM_COLS + j] = gameItem;
 
-        // Spot Light
-        lightPosition = new Vector3f(0, 0.0f, 10f);
-        pointLight = new PointLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity);
-        att = new PointLight.Attenuation(0.0f, 0.0f, 0.02f);
-        pointLight.setAttenuation(att);
-        Vector3f coneDir = new Vector3f(0, 0, -1);
-        float cutoff = (float) Math.cos(Math.toRadians(140));
-        SpotLight spotLight = new SpotLight(pointLight, coneDir, cutoff);
-        sceneLight.setSpotLightList(new SpotLight[]{spotLight, new SpotLight(spotLight)});
+                posx += inc;
+            }
+            posx = startx;
+            posz -= inc;
+        }
+        scene.setGameItems(gameItems);
 
-        lightPosition = new Vector3f(-1, 0, 0);
-        sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
+        // Setup  SkyBox
+        SkyBox skyBox = new SkyBox("models/skybox.obj", "textures/skybox.png");
+        skyBox.setScale(skyBoxScale);
+        scene.setSkyBox(skyBox);
+
+        // Setup Lights
+        setupLights();
 
         // Create HUD
         hud = new HudImpl("DEMO");
+
+        camera.getPosition().x = 0.65f;
+        camera.getPosition().y = 1.15f;
+        camera.getPosition().y = 4.34f;
     }
+
+    private void setupLights() {
+        SceneLight sceneLight = new SceneLight();
+        scene.setSceneLight(sceneLight);
+
+        // Ambient Light
+        sceneLight.setAmbientLight(new Vector3f(1.0f, 1.0f, 1.0f));
+
+        // Directional Light
+        float lightIntensity = 1.0f;
+        Vector3f lightPosition = new Vector3f(-1, 0, 0);
+        sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
+    }
+
 
     @Override
     public void input(Window window, MouseInput mouseInput) {
@@ -95,21 +119,10 @@ public class DummyGame implements GameLogic {
         } else if (window.isKeyPressed(GLFW_KEY_X)) {
             cameraInc.y = 1;
         }
-
-        SpotLight[] spotLightList = sceneLight.getSpotLightList();
-        float lightPos = spotLightList[0].getPointLight().getPosition().z;
-        if (window.isKeyPressed(GLFW_KEY_N)) {
-            spotLightList[0].getPointLight().getPosition().z = lightPos + 0.1f;
-        } else if (window.isKeyPressed(GLFW_KEY_M)) {
-            spotLightList[0].getPointLight().getPosition().z = lightPos - 0.1f;
-        }
     }
 
     @Override
     public void update(float interval, MouseInput mouseInput) {
-        // Update camera position
-        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
-
         // Update camera based on mouse
         if (mouseInput.isRightButtonPressed()) {
             Vector2f rotVec = mouseInput.getDisplVec();
@@ -119,19 +132,12 @@ public class DummyGame implements GameLogic {
             hud.rotateCompass(camera.getRotation().y);
         }
 
-        // Update spot light direction
-        spotAngle += spotInc * 0.05f;
-        if (spotAngle > 2) {
-            spotInc = -1;
-        } else if (spotAngle < -2) {
-            spotInc = 1;
-        }
-        double spotAngleRad = Math.toRadians(spotAngle);
-        SpotLight[] spotLightList = sceneLight.getSpotLightList();
-        Vector3f coneDir = spotLightList[0].getConeDirection();
-        coneDir.y = (float) Math.sin(spotAngleRad);
+        // Update camera position
+        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
 
-        // Update directional light direction, intensity and color
+        SceneLight sceneLight = scene.getSceneLight();
+
+        // Update directional light direction, intensity and colour
         DirectionalLight directionalLight = sceneLight.getDirectionalLight();
         lightAngle += 1.1f;
         if (lightAngle > 90) {
@@ -139,12 +145,15 @@ public class DummyGame implements GameLogic {
             if (lightAngle >= 360) {
                 lightAngle = -90;
             }
+            sceneLight.getAmbientLight().set(0.3f, 0.3f, 0.4f);
         } else if (lightAngle <= -80 || lightAngle >= 80) {
-            float factor = 1 - (float)(Math.abs(lightAngle) - 80)/ 10.0f;
+            float factor = 1 - (float) (Math.abs(lightAngle) - 80) / 10.0f;
+            sceneLight.getAmbientLight().set(factor, factor, factor);
             directionalLight.setIntensity(factor);
             directionalLight.getColor().y = Math.max(factor, 0.9f);
             directionalLight.getColor().z = Math.max(factor, 0.5f);
         } else {
+            sceneLight.getAmbientLight().set(1, 1, 1);
             directionalLight.setIntensity(1);
             directionalLight.getColor().x = 1;
             directionalLight.getColor().y = 1;
@@ -158,15 +167,17 @@ public class DummyGame implements GameLogic {
     @Override
     public void render(Window window) {
         hud.updateSize(window);
-        renderer.render(window, camera, gameItems, sceneLight, hud);
+        renderer.render(window, camera, scene, hud);
     }
 
     @Override
     public void cleanup() {
         renderer.cleanup();
-        for (GameItem gameItem : gameItems) {
-            gameItem.getMesh().cleanUp();
+        Map<Mesh, List<GameItem>> mapMeshes = scene.getGameMeshes();
+        for (Mesh mesh : mapMeshes.keySet()) {
+            mesh.cleanUp();
         }
         hud.cleanup();
     }
+
 }

@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -11,6 +12,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.memFree;
 
+import com.github.jsappz.lamegame.engine.GameItem;
 import org.lwjgl.system.MemoryUtil;
 
 public class Mesh {
@@ -103,7 +105,7 @@ public class Mesh {
         return vertexCount;
     }
 
-    public void render() {
+    private void initRender() {
         Texture texture = material.getTexture();
         if (texture != null) {
             // Activate firs texture bank
@@ -114,13 +116,36 @@ public class Mesh {
 
         // Draw the mesh
         glBindVertexArray(getVaoId());
+    }
+
+    private void endRender() {
+        // Restore state
+        glBindVertexArray(0);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    public void render() {
+        initRender();
 
         glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
 
-        // Restore state
-        glBindVertexArray(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        endRender();
     }
+
+    public void renderList(List<GameItem> gameItems, Consumer<GameItem> consumer) {
+        initRender();
+
+        for (GameItem gameItem : gameItems) {
+            // Set up data required by GameItem
+            consumer.accept(gameItem);
+            // Render this game item
+            glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
+        }
+
+        endRender();
+    }
+
 
     public void cleanUp() {
         glDisableVertexAttribArray(0);
