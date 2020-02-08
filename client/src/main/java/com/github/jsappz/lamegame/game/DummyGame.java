@@ -2,10 +2,13 @@ package com.github.jsappz.lamegame.game;
 
 import com.github.jsappz.lamegame.engine.*;
 import com.github.jsappz.lamegame.engine.graph.*;
+import com.github.jsappz.lamegame.engine.graph.lights.DirectionalLight;
+import com.github.jsappz.lamegame.engine.item.GameItem;
+import com.github.jsappz.lamegame.engine.item.SkyBox;
+import com.github.jsappz.lamegame.engine.item.Terrain;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -35,41 +38,15 @@ public class DummyGame implements GameLogic {
     public void init(Window window) throws Exception {
         renderer.init();
         scene = new Scene();
-        float reflectance = 1f;
-        Mesh mesh = OBJLoader.loadMesh(Paths.get(ClassLoader.getSystemResource("models/cube.obj").toURI()));
-        Texture texture = new Texture(Paths.get(ClassLoader.getSystemResource("textures/grassblock.png").toURI()).toFile().getAbsolutePath());
-        Material material = new Material(texture, reflectance);
-        mesh.setMaterial(material);
 
-        float blockScale = 0.5f;
         float skyBoxScale = 50.0f;
-        float extension = 2.0f;
-
-        float startx = extension * (-skyBoxScale + blockScale);
-        float startz = extension * (skyBoxScale - blockScale);
-        float starty = -1.0f;
-        float inc = blockScale * 2;
-
-        float posx = startx;
-        float posz = startz;
-        float incy = 0.0f;
-        int NUM_ROWS = (int)(extension * skyBoxScale * 2 / inc);
-        int NUM_COLS = (int)(extension * skyBoxScale * 2/ inc);
-        GameItem[] gameItems  = new GameItem[NUM_ROWS * NUM_COLS];
-        for(int i=0; i<NUM_ROWS; i++) {
-            for(int j=0; j<NUM_COLS; j++) {
-                GameItem gameItem = new GameItem(mesh);
-                gameItem.setScale(blockScale);
-                incy = Math.random() > 0.9f ? blockScale * 2 : 0f;
-                gameItem.setPosition(posx, starty + incy, posz);
-                gameItems[i*NUM_COLS + j] = gameItem;
-
-                posx += inc;
-            }
-            posx = startx;
-            posz -= inc;
-        }
-        scene.setGameItems(gameItems);
+        float terrainScale = 100;
+        int terrainSize = 10;
+        float minY = -0.1f;
+        float maxY = 0.1f;
+        int textInc = 40;
+        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "textures/heightmap.png", "textures/terrain.png", textInc);
+        scene.setGameItems(terrain.getGameItems());
 
         // Setup  SkyBox
         SkyBox skyBox = new SkyBox("models/skybox.obj", "textures/skybox.png");
@@ -92,12 +69,12 @@ public class DummyGame implements GameLogic {
         scene.setSceneLight(sceneLight);
 
         // Ambient Light
-        sceneLight.setAmbientLight(new Vector3f(1.0f, 1.0f, 1.0f));
+        sceneLight.setAmbientLight(WHITE_LIGHT);
 
         // Directional Light
         float lightIntensity = 1.0f;
         Vector3f lightPosition = new Vector3f(-1, 0, 0);
-        sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(1, 1, 1), lightPosition, lightIntensity));
+        sceneLight.setDirectionalLight(new DirectionalLight(new Vector3f(.5f, .5f, .5f ), lightPosition, lightIntensity));
     }
 
 
@@ -137,7 +114,7 @@ public class DummyGame implements GameLogic {
 
         SceneLight sceneLight = scene.getSceneLight();
 
-        // Update directional light direction, intensity and colour
+        // Update directional light direction, intensity and color
         DirectionalLight directionalLight = sceneLight.getDirectionalLight();
         lightAngle += 1.1f;
         if (lightAngle > 90) {

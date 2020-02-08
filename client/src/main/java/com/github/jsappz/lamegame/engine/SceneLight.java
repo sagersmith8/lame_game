@@ -1,8 +1,8 @@
 package com.github.jsappz.lamegame.engine;
 
-import com.github.jsappz.lamegame.engine.graph.DirectionalLight;
-import com.github.jsappz.lamegame.engine.graph.PointLight;
-import com.github.jsappz.lamegame.engine.graph.SpotLight;
+import com.github.jsappz.lamegame.engine.graph.lights.DirectionalLight;
+import com.github.jsappz.lamegame.engine.graph.lights.PointLight;
+import com.github.jsappz.lamegame.engine.graph.lights.SpotLight;
 import org.joml.Vector3f;
 
 public class SceneLight {

@@ -1,4 +1,4 @@
-package com.github.jsappz.lamegame.engine;
+package com.github.jsappz.lamegame.engine.item;
 import com.github.jsappz.lamegame.engine.graph.Mesh;
 import org.joml.Vector3f;
 

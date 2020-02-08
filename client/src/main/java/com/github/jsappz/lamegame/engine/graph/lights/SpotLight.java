@@ -1,4 +1,4 @@
-package com.github.jsappz.lamegame.engine.graph;
+package com.github.jsappz.lamegame.engine.graph.lights;
 
 import org.joml.Vector3f;
 

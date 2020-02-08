@@ -1,9 +1,13 @@
-package com.github.jsappz.lamegame.engine;
+package com.github.jsappz.lamegame.game;
 
+import com.github.jsappz.lamegame.engine.Hud;
+import com.github.jsappz.lamegame.engine.Window;
 import com.github.jsappz.lamegame.engine.graph.FontTexture;
 import com.github.jsappz.lamegame.engine.graph.Material;
 import com.github.jsappz.lamegame.engine.graph.Mesh;
 import com.github.jsappz.lamegame.engine.graph.OBJLoader;
+import com.github.jsappz.lamegame.engine.item.GameItem;
+import com.github.jsappz.lamegame.engine.item.TextItem;
 import org.joml.Vector4f;
 
 import java.awt.*;

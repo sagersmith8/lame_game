@@ -1,5 +1,7 @@
 package com.github.jsappz.lamegame.engine;
 
+import com.github.jsappz.lamegame.engine.item.GameItem;
+
 public interface Hud {
     GameItem[] getGameItems();
 

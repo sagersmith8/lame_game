@@ -1,6 +1,6 @@
 package com.github.jsappz.lamegame.engine.graph;
 
-import com.github.jsappz.lamegame.engine.GameItem;
+import com.github.jsappz.lamegame.engine.item.GameItem;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

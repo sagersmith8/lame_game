@@ -1,5 +1,6 @@
-package com.github.jsappz.lamegame.engine;
+package com.github.jsappz.lamegame.engine.item;
 
+import com.github.jsappz.lamegame.engine.Utils;
 import com.github.jsappz.lamegame.engine.graph.FontTexture;
 import com.github.jsappz.lamegame.engine.graph.Material;
 import com.github.jsappz.lamegame.engine.graph.Mesh;

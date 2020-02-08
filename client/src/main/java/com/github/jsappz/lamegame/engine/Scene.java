@@ -1,6 +1,8 @@
 package com.github.jsappz.lamegame.engine;
 
 import com.github.jsappz.lamegame.engine.graph.Mesh;
+import com.github.jsappz.lamegame.engine.item.GameItem;
+import com.github.jsappz.lamegame.engine.item.SkyBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;

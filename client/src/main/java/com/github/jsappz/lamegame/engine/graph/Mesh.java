@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.memFree;
 
-import com.github.jsappz.lamegame.engine.GameItem;
+import com.github.jsappz.lamegame.engine.item.GameItem;
 import org.lwjgl.system.MemoryUtil;
 
 public class Mesh {

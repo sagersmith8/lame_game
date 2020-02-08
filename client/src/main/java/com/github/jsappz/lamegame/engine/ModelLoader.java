@@ -1,6 +1,6 @@
 package com.github.jsappz.lamegame.engine;
 
-import com.github.jsappz.lamegame.engine.graph.Mesh;
+import com.github.jsappz.lamegame.engine.item.GameItem;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ModelLoader {
