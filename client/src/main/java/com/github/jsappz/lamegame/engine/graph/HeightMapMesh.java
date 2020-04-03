@@ -1,50 +1,31 @@
 package com.github.jsappz.lamegame.engine.graph;
 
-import static org.lwjgl.stb.STBImage.stbi_failure_reason;
-import static org.lwjgl.stb.STBImage.stbi_image_free;
-import static org.lwjgl.stb.STBImage.stbi_load;
-
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.github.jsappz.lamegame.engine.Utils;
 import org.joml.Vector3f;
-import org.lwjgl.system.MemoryStack;
 
 public class HeightMapMesh {
     private static final int MAX_COLOR = 255 * 255 * 255;
-    private static final float STARTX = -0.5f;
-    private static final float STARTZ = -0.5f;
+    public static final float STARTX = -0.5f;
+    public static final float STARTZ = -0.5f;
 
     private final float minY;
     private final float maxY;
     private final Mesh mesh;
 
-    public HeightMapMesh(float minY, float maxY, String heightMapFile, String textureFile, int textInc) throws Exception {
+    private final float[][] heightArray;
+
+    public HeightMapMesh(float minY, float maxY, ByteBuffer heightMapImage, int width, int height, String textureFile, int textInc) throws Exception {
         this.minY = minY;
         this.maxY = maxY;
 
-        ByteBuffer buf = null;
-        int width;
-        int height;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer w = stack.mallocInt(1);
-            IntBuffer h = stack.mallocInt(1);
-            IntBuffer channels = stack.mallocInt(1);
+        heightArray = new float[height][width];
 
-            buf = stbi_load(Paths.get(ClassLoader.getSystemResource(heightMapFile).toURI()).toFile().getAbsolutePath(), w, h, channels, 4);
-            if (buf == null) {
-                throw new Exception("Image file [" + heightMapFile  + "] not loaded: " + stbi_failure_reason());
-            }
-
-            width = w.get();
-            height = h.get();
-        }
-//        Paths.get(Thread.currentThread().getContextClassLoader().getResource(textureFile).toURI()).toFile().getAbsolutePath();
-        Texture texture = new Texture(Paths.get(Thread.currentThread().getContextClassLoader().getResource(textureFile).toURI()).toFile().getAbsolutePath());
+        Texture texture = new Texture(Paths.get(ClassLoader.getSystemResource(textureFile).toURI()).toFile().getAbsolutePath());
 
         float incx = getXLength() / (width - 1);
         float incz = getZLength() / (height - 1);
@@ -57,7 +38,9 @@ public class HeightMapMesh {
             for (int col = 0; col < width; col++) {
                 // Create vertex for current position
                 positions.add(STARTX + col * incx); // x
-                positions.add(getHeight(col, row, width, buf)); //y
+                float currentHeight = getHeight(col, row, width, heightMapImage);
+                heightArray[row][col] = currentHeight;
+                positions.add(currentHeight); //y
                 positions.add(STARTZ + row * incz); //z
 
                 // Set texture coordinates
@@ -71,13 +54,13 @@ public class HeightMapMesh {
                     int rightBottom = (row + 1) * width + col + 1;
                     int rightTop = row * width + col + 1;
 
-                    indices.add(leftTop);
-                    indices.add(leftBottom);
-                    indices.add(rightTop);
-
                     indices.add(rightTop);
                     indices.add(leftBottom);
                     indices.add(rightBottom);
+
+                    indices.add(leftTop);
+                    indices.add(leftBottom);
+                    indices.add(rightTop);
                 }
             }
         }
@@ -88,12 +71,20 @@ public class HeightMapMesh {
         this.mesh = new Mesh(posArr, textCoordsArr, normalsArr, indicesArr);
         Material material = new Material(texture, 0.0f);
         mesh.setMaterial(material);
-
-        stbi_image_free(buf);
     }
 
     public Mesh getMesh() {
         return mesh;
+    }
+
+    public float getHeight(int row, int col) {
+        float result = 0;
+        if ( row >= 0 && row < heightArray.length ) {
+            if ( col >= 0 && col < heightArray[row].length ) {
+                result = heightArray[row][col];
+            }
+        }
+        return result;
     }
 
     public static float getXLength() {

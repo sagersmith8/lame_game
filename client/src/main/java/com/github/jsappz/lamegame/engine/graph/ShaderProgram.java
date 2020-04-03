@@ -3,6 +3,7 @@ package com.github.jsappz.lamegame.engine.graph;
 import com.github.jsappz.lamegame.engine.graph.lights.DirectionalLight;
 import com.github.jsappz.lamegame.engine.graph.lights.PointLight;
 import com.github.jsappz.lamegame.engine.graph.lights.SpotLight;
+import com.github.jsappz.lamegame.engine.graph.weather.Fog;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -86,6 +87,12 @@ public class ShaderProgram {
         createUniform(uniformName + ".reflectance");
     }
 
+    public void createFogUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".activeFog");
+        createUniform(uniformName + ".color");
+        createUniform(uniformName + ".density");
+    }
+
     public void setUniform(String uniformName, Matrix4f value) {
         // Dump the matrix into a float buffer
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -160,6 +167,12 @@ public class ShaderProgram {
         setUniform(uniformName + ".specular", material.getSpecularColor());
         setUniform(uniformName + ".hasTexture", material.isTextured() ? 1 : 0);
         setUniform(uniformName + ".reflectance", material.getReflectance());
+    }
+
+    public void setUniform(String uniformName, Fog fog) {
+        setUniform(uniformName + ".activeFog", fog.isActive() ? 1 : 0);
+        setUniform(uniformName + ".color", fog.getColor());
+        setUniform(uniformName + ".density", fog.getDensity());
     }
 
     protected int createShader(String shaderCode, int shaderType) throws Exception {

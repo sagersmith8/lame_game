@@ -3,13 +3,13 @@ package com.github.jsappz.lamegame.game;
 import com.github.jsappz.lamegame.engine.*;
 import com.github.jsappz.lamegame.engine.graph.*;
 import com.github.jsappz.lamegame.engine.graph.lights.DirectionalLight;
+import com.github.jsappz.lamegame.engine.graph.weather.Fog;
 import com.github.jsappz.lamegame.engine.item.GameItem;
 import com.github.jsappz.lamegame.engine.item.SkyBox;
 import com.github.jsappz.lamegame.engine.item.Terrain;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +26,7 @@ public class DummyGame implements GameLogic {
     private Scene scene;
     private Hud hud;
     private float lightAngle;
+    private Terrain terrain;
 
     public DummyGame() {
         renderer = new Renderer();
@@ -40,13 +41,15 @@ public class DummyGame implements GameLogic {
         scene = new Scene();
 
         float skyBoxScale = 50.0f;
-        float terrainScale = 100;
-        int terrainSize = 10;
+        float terrainScale = 10;
+        int terrainSize = 3;
         float minY = -0.1f;
         float maxY = 0.1f;
         int textInc = 40;
-        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "textures/heightmap.png", "textures/terrain.png", textInc);
+        terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "textures/heightmap.png", "textures/terrain.png", textInc);
         scene.setGameItems(terrain.getGameItems());
+
+        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.15f));
 
         // Setup  SkyBox
         SkyBox skyBox = new SkyBox("models/skybox.obj", "textures/skybox.png");
@@ -110,7 +113,14 @@ public class DummyGame implements GameLogic {
         }
 
         // Update camera position
+        Vector3f prevPos = new Vector3f(camera.getPosition());
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        // Check if there has been a collision. If true, set the y position to
+        // the maximum height
+        float height = terrain.getHeight(camera.getPosition());
+        if ( camera.getPosition().y <= height )  {
+            camera.setPosition(prevPos.x, prevPos.y, prevPos.z);
+        }
 
         SceneLight sceneLight = scene.getSceneLight();
 
