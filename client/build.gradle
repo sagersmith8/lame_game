@@ -1,9 +1,5 @@
 plugins {
     id 'com.gorylenko.gradle-git-properties' version '1.4.16'
-    id 'application'
-}
-application {
-    mainClassName = 'com.github.jsappz.lamegame.game.Main'
 }
 
 repositories {
