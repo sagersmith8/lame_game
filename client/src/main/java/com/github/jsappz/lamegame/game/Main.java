@@ -10,7 +10,7 @@ public class Main {
             GameLogic gameLogic = new DummyGame();
             GameEngine gameEng = new GameEngine("Lame Game", 600, 480, vSync, gameLogic);
             gameEng.run();
-        } catch (Exception excp) {
+        } catch (Throwable excp) {
             excp.printStackTrace();
             System.exit(-1);
         }

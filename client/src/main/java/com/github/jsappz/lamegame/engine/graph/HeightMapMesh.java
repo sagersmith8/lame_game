@@ -25,7 +25,7 @@ public class HeightMapMesh {
 
         heightArray = new float[height][width];
 
-        Texture texture = new Texture(Paths.get(ClassLoader.getSystemResource(textureFile).toURI()).toFile().getAbsolutePath());
+        Texture texture = new Texture(textureFile);
 
         float incx = getXLength() / (width - 1);
         float incz = getZLength() / (height - 1);
