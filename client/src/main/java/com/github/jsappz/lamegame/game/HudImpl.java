@@ -26,8 +26,7 @@ public class HudImpl implements Hud {
         this.statusTextItem = new TextItem(statusText, fontTexture);
        this.statusTextItem.getMesh().getMaterial().setAmbientColor(new Vector4f(1, 1, 1, 1));
         // Create compass
-        Path path = Paths.get(ClassLoader.getSystemResource("models/compass.obj").toURI());
-        Mesh mesh = OBJLoader.loadMesh(path);
+        Mesh mesh = OBJLoader.loadMesh("models/compass.obj");
         Material material = new Material();
         material.setAmbientColor(new Vector4f(.5f, 0, 0, 1));
         mesh.setMaterial(material);

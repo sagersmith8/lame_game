@@ -1,7 +1,11 @@
 package com.github.jsappz.lamegame.engine.graph;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+
+import org.apache.commons.io.IOUtils;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -20,8 +24,13 @@ public class Texture {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
-
-            buf = stbi_load(fileName, w, h, channels, 4);
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream(fileName)) {
+                byte[] imageData = IOUtils.toByteArray(is);
+                ByteBuffer imageBuffer = BufferUtils.createByteBuffer(imageData.length);
+                imageBuffer.put(imageData);
+                imageBuffer.flip();
+                buf = stbi_load_from_memory(imageBuffer, w, h, channels, 4);
+            }
             if (buf == null) {
                 throw new Exception("Image file [" + fileName  + "] not loaded: " + stbi_failure_reason());
             }
