@@ -5,7 +5,6 @@
 .gradle
 build
 out
-gradle
 
 # spring-boot
 */$buildDir
