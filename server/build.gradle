@@ -4,6 +4,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 }
 
+group 'com.github.jsappz.lamegame.server'
+
 repositories {
     mavenCentral()
 }
@@ -18,15 +20,16 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
+    compile libraries.gauva
+    compile libraries.h2
+    compile libraries.hikari
+    compile libraries.flyway
+    compile libraries.mysql_connector_java
     compile libraries.logback
 
     testCompile libraries.hamcrest
     testCompile libraries.junit
     testCompile libraries.mockito
-}
-
-test {
-    useJUnitPlatform()
 }
 
 gitProperties {
