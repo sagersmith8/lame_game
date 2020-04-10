@@ -1,0 +1,13 @@
+---
+name: Task issue template
+about: A game task
+title:''
+labels: ''
+assignees: ''
+---
+
+# DESCRIPTION
+** Provide info about the cahnge to be made **
+
+# ACCEPTANCE CRITERIA
+** What constitutes this task as being done **
