@@ -9,21 +9,21 @@ public class RuntimeOptionsImpl implements RuntimeOptions {
     @Value("${db-embedded:false}")
     boolean dbEmbedded;
 
+    @Value("${db-url:}")
+    String dbUrl;
+
     @Value("${db-user:root}")
     String dbUser;
 
     @Value("${db-password:secret}")
     String dbPassword;
 
-    @Value("${db-migrate:false}")
-    boolean dbMigrate;
-
-    @Value("${db-enabled:true}")
-    boolean dbEnabled;
-
     @Override
     public String getDbUrl() {
-        return dbEmbedded ? H2_CONNECTION_URL : DEFAULT_CONNECTION_URL;
+        if (dbUrl.isEmpty()) {
+            return dbEmbedded ? H2_CONNECTION_URL : DEFAULT_CONNECTION_URL;
+        }
+        return dbUrl;
     }
 
     @Override
@@ -34,15 +34,5 @@ public class RuntimeOptionsImpl implements RuntimeOptions {
     @Override
     public String getDbPassword() {
         return dbPassword;
-    }
-
-    @Override
-    public boolean isDbEnabled() {
-        return dbEnabled;
-    }
-
-    @Override
-    public boolean isDbMigrate() {
-        return dbMigrate;
     }
 }
