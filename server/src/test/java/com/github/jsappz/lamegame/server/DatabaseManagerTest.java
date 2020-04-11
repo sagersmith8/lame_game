@@ -1,5 +1,6 @@
 package com.github.jsappz.lamegame.server;
 
+import static java.util.Objects.requireNonNull;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -28,7 +29,7 @@ public class DatabaseManagerTest {
     @Test
     public void testWriteAndRead() throws Exception {
         assertThat(databaseManager.write(writeUser("savage_smith")), is(false));
-        assertThat(databaseManager.read(readUser("savage_smith")), is("success"));
+        assertThat(databaseManager.read(readUser("savage_smith")), is("savage_smith"));
     }
 
     public static DatabaseAction<Object, Exception> writeUser(String user) {
@@ -41,16 +42,18 @@ public class DatabaseManagerTest {
         };
     }
 
-    public static DatabaseAction<Object, Exception> readUser(String user) {
+    public static DatabaseAction<String, Exception> readUser(String user) {
         return (Connection conn) -> {
             String query = "SELECT * FROM users";
+            String username = null;
             try (Statement statement = conn.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {
                 while (resultSet.next()) {
-                    assertThat(resultSet.getString("username"), is(user));
+                    username = requireNonNull(resultSet.getString("username"), "username");
+                    assertThat(resultSet.next(), is(false));
                 }
             }
-            return "success";
+            return username;
         };
     }
 }
