@@ -20,6 +20,9 @@ public class DatabaseConfig {
         return dialect;
     }
 
+    // This is used to allow the allow our base config to not
+    // affect the configuration if the builder is used to create
+    // multiple DatabaseConfig's
     public HikariConfig getConfig(String poolName) {
         HikariConfig hikariConfig = new HikariConfig();
         baseConfig.copyStateTo(hikariConfig);
