@@ -4,12 +4,17 @@ ext {
     implementations = [:]
 }
 
+versions.flyway = '6.1.3'
+versions.gauva = '23.0'
+versions.h2 = '1.4.199'
 versions.hamcrest = '2.0.0.0'
+versions.hikari = '3.4.1'
 versions.joml = '1.9.20'
 versions.junit = '4.12'
 versions.logback = '1.2.3'
 versions.lwjgl = '3.2.3'
 versions.lwjgl_natives = 'natives-windows'
+versions.mysql = '8.0.11'
 versions.mockito = '2.7.22'
 
 implementations.lwjgl = "org.lwjgl:lwjgl"
@@ -51,7 +56,11 @@ implementations.lwjgl_xxhash = "org.lwjgl:lwjgl-xxhash"
 implementations.lwjgl_yoga = "org.lwjgl:lwjgl-yoga"
 implementations.lwjgl_zstd = "org.lwjgl:lwjgl-zstd"
 
+libraries.gauva = "com.google.guava:guava:${versions.gauva}"
+libraries.flyway = "org.flywaydb:flyway-core:${versions.flyway}"
+libraries.h2 = "com.h2database:h2:${versions.h2}"
 libraries.hamcrest = "org.hamcrest:java-hamcrest:${versions.hamcrest}"
+libraries.hikari = "com.zaxxer:HikariCP:${versions.hikari}"
 libraries.joml = "org.joml:joml:${versions.joml}"
 libraries.junit = "junit:junit:${versions.junit}"
 libraries.logback = "ch.qos.logback:logback-classic:${versions.logback}"
@@ -89,3 +98,4 @@ libraries.lwjgl_xxhash = "${implementations.lwjgl_xxhash}::${versions.lwjgl_nati
 libraries.lwjgl_yoga = "${implementations.lwjgl_yoga}::${versions.lwjgl_natives}"
 libraries.lwjgl_zstd = "${implementations.lwjgl_zstd}::${versions.lwjgl_natives}"
 libraries.mockito = "org.mockito:mockito-core:${versions.mockito}"
+libraries.mysql_connector_java = "mysql:mysql-connector-java:${versions.mysql}"
