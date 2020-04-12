@@ -1,9 +1,10 @@
-package com.github.jsappz.lamegame.server;
+package com.github.jsappz.lamegame.server.database;
 
 import static java.util.Objects.requireNonNull;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import com.github.jsappz.lamegame.server.database.dialects.StandardDialect;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class DatabaseManagerTest {
 
     @Test
     public void testWriteAndRead() throws Exception {
-        assertThat(databaseManager.write(writeUser("savage_smith")), is(false));
+       databaseManager.write(writeUser("savage_smith"));
         assertThat(databaseManager.read(readUser("savage_smith")), is("savage_smith"));
     }
 
@@ -44,7 +45,7 @@ public class DatabaseManagerTest {
 
     public static DatabaseAction<String, Exception> readUser(String user) {
         return (Connection conn) -> {
-            String query = "SELECT * FROM users";
+            String query = "SELECT * FROM users where username = 'savage_smith'";
             String username = null;
             try (Statement statement = conn.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {

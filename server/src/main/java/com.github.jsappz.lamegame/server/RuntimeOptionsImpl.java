@@ -6,7 +6,7 @@ public class RuntimeOptionsImpl implements RuntimeOptions {
     private static final String DEFAULT_CONNECTION_URL = "jdbc:mysql://mysql/lamegame?createDatabaseIfNotExist=true";
     private static final String H2_CONNECTION_URL = "jdbc:h2:mem:lamegame;MODE=MYSQL;DB_CLOSE_DELAY=-1";
 
-    @Value("${db-embedded:false}")
+    @Value("${db-embedded:true}")
     boolean dbEmbedded;
 
     @Value("${db-url:}")

@@ -26,6 +26,9 @@ dependencies {
     compile libraries.flyway
     compile libraries.mysql_connector_java
     compile libraries.logback
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    compile 'io.springfox:springfox-swagger2:2.7.0'
+    compile 'io.springfox:springfox-swagger-ui:2.7.0'
 
     testCompile libraries.hamcrest
     testCompile libraries.junit

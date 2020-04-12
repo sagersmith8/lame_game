@@ -1,5 +1,6 @@
-package com.github.jsappz.lamegame.server;
+package com.github.jsappz.lamegame.server.database.dialects;
 
+import com.github.jsappz.lamegame.server.database.SqlDialect;
 import com.mysql.cj.exceptions.MysqlErrorNumbers;
 import com.mysql.cj.jdbc.Driver;
 
