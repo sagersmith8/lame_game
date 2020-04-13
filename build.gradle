@@ -19,4 +19,37 @@ allprojects {
     apply plugin: 'jacoco'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+
+        maven { url "http://repo1.maven.org/maven2/" }
+    }
+}
+
+task codeCoverageReport(type: JacocoReport) {
+
+    // Gather execution data from all subprojects
+    // (change this if you e.g. want to calculate unit test/integration test coverage separately)
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    // Add all relevant sourcesets from the subprojects
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination(file("${buildDir}/reports/jacoco/jacoco.xml"))
+        html.enabled true
+        html.destination(file("${buildDir}/reports/jacoco"))
+        csv.enabled false
+    }
+}
+
+// always run the tests before generating the report
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }

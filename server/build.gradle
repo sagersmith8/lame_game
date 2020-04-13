@@ -6,10 +6,6 @@ plugins {
 
 group 'com.github.jsappz.lamegame.server'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -37,10 +33,3 @@ gitProperties {
     dateFormatTimeZone = "CST"
     keys = gitPropertyKeys
 }
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-    }
-}
-check.dependsOn jacocoTestReport
