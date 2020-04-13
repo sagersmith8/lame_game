@@ -1,4 +1,4 @@
-package com.github.jsappz.lamegame.server;
+package com.github.jsappz.lamegame.server.database;
 
 import com.zaxxer.hikari.HikariConfig;
 
