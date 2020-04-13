@@ -18,5 +18,3 @@ public enum SqlDialects {
         return dialect;
     }
 }
-
-
