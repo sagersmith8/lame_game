@@ -10,14 +10,16 @@ public class UserActions {
 
     public static DatabaseAction<User, Exception> getUser(String username) {
         return (Connection conn) -> {
-            String query = "SELECT * FROM users WHERE username= '" + username + "'";
+            String query = "SELECT * FROM users WHERE username=?";
             User.Builder user = User.builder();
-            try (Statement statement = conn.createStatement();
-                 ResultSet resultSet = statement.executeQuery(query)) {
-                while (resultSet.next()) {
-                    assert resultSet.isLast();
-                    user.id(resultSet.getInt("id"));
-                    user.username(resultSet.getString("username"));
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1,  username);
+                try (ResultSet resultSet = ps.executeQuery()) {
+                    while (resultSet.next()) {
+                        assert resultSet.isLast();
+                        user.id(resultSet.getInt("id"));
+                        user.username(resultSet.getString("username"));
+                    }
                 }
             }
             return user.build();
