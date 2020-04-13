@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import static java.util.Objects.requireNonNull;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -17,12 +18,12 @@ public class MainController {
 
     @Autowired
     public MainController(UserResponseProvider userResponseProvider) {
-        this.userResponseProvider = userResponseProvider;
+        this.userResponseProvider = requireNonNull(userResponseProvider, "userResponseProvider");
     }
 
     @RequestMapping(
             value = "/user/{username}",
-            method =GET,
+            method = GET,
             produces = {"application/json"})
     @ResponseBody
     public ResponseEntity<StreamingResponseBody> getUser(

@@ -26,7 +26,7 @@ public class UserActions {
 
     public static DatabaseAction<Boolean, Exception> createUser(User user) {
         return (Connection conn) -> {
-            String query = " insert into users (username) values (?)";
+            String query = " INSERT INTO users (username) VALUES (?)";
             try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
                 preparedStatement.setString(1, user.getUsername());
                 preparedStatement.execute();

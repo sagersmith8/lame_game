@@ -7,6 +7,7 @@ import com.github.jsappz.lamegame.server.model.User;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,6 +28,8 @@ public class UserActionsTest {
     @Test
     public void testWriteAndRead() throws Exception {
         databaseManager.write(UserActions.createUser(User.builder().username("user").build()));
-        assertThat(databaseManager.read(UserActions.getUser("user")).getUsername(), is("user"));
+        User user = databaseManager.read(UserActions.getUser("user"));
+        assertThat(user.getUsername(), is("user"));
+        assertThat(user.getId(), is(greaterThan(0)));
     }
 }

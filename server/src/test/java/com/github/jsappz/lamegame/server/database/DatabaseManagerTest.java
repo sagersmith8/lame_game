@@ -45,7 +45,7 @@ public class DatabaseManagerTest {
 
     public static DatabaseAction<String, Exception> readUser(String user) {
         return (Connection conn) -> {
-            String query = "SELECT * FROM users where username = 'savage_smith'";
+            String query = "SELECT * FROM users where username = '" + user + "'";
             String username = null;
             try (Statement statement = conn.createStatement();
                  ResultSet resultSet = statement.executeQuery(query)) {

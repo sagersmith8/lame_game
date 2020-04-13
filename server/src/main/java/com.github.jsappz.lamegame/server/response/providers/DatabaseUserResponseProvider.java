@@ -55,8 +55,8 @@ public class DatabaseUserResponseProvider implements UserResponseProvider {
                     LOGGER.error("Error writing to database " + e, e);
                     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-                try (PrintWriter pw = new PrintWriter(outputStream)) {
-                    pw.println(success ? "success": "failed");
+                if (!success) {
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         };
