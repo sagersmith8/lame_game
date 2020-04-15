@@ -1,0 +1,13 @@
+plugins {
+    id 'com.gorylenko.gradle-git-properties' version '2.2.2'
+}
+
+group 'com.github.jsappz.lamegame.sdk'
+
+dependencies {
+    compile libraries.apache_http
+    compile project(':model')
+
+    testCompile libraries.hamcrest
+    testCompile libraries.junit
+}

@@ -4,11 +4,14 @@ ext {
     implementations = [:]
 }
 
+versions.apache_http = '4.5.12'
+versions.commons3 = '3.10'
 versions.flyway = '6.3.3'
 versions.gauva = '23.0'
 versions.h2 = '1.4.200'
 versions.hamcrest = '2.0.0.0'
 versions.hikari = '3.4.2'
+versions.jackson = '2.10.3'
 versions.joml = '1.9.24'
 versions.junit = '4.13'
 versions.logback = '1.2.3'
@@ -16,6 +19,7 @@ versions.lwjgl = '3.2.3'
 versions.lwjgl_natives = 'natives-windows'
 versions.mysql = '8.0.19'
 versions.mockito = '3.3.3'
+versions.swagger = '2.9.2'
 
 implementations.lwjgl = "org.lwjgl:lwjgl"
 implementations.lwjgl_assimp = "org.lwjgl:lwjgl-assimp"
@@ -56,11 +60,15 @@ implementations.lwjgl_xxhash = "org.lwjgl:lwjgl-xxhash"
 implementations.lwjgl_yoga = "org.lwjgl:lwjgl-yoga"
 implementations.lwjgl_zstd = "org.lwjgl:lwjgl-zstd"
 
+libraries.apache_http = "org.apache.httpcomponents:httpclient:${versions.apache_http}"
+libraries.commons_lang3 = "org.apache.commons:commons-lang3:${versions.commons3}"
 libraries.gauva = "com.google.guava:guava:${versions.gauva}"
 libraries.flyway = "org.flywaydb:flyway-core:${versions.flyway}"
 libraries.h2 = "com.h2database:h2:${versions.h2}"
 libraries.hamcrest = "org.hamcrest:java-hamcrest:${versions.hamcrest}"
 libraries.hikari = "com.zaxxer:HikariCP:${versions.hikari}"
+libraries.jackson_core = "com.fasterxml.jackson.core:jackson-core:${versions.jackson}"
+libraries.jackson_databind = "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
 libraries.joml = "org.joml:joml:${versions.joml}"
 libraries.junit = "junit:junit:${versions.junit}"
 libraries.logback = "ch.qos.logback:logback-classic:${versions.logback}"
@@ -99,3 +107,5 @@ libraries.lwjgl_yoga = "${implementations.lwjgl_yoga}::${versions.lwjgl_natives}
 libraries.lwjgl_zstd = "${implementations.lwjgl_zstd}::${versions.lwjgl_natives}"
 libraries.mockito = "org.mockito:mockito-core:${versions.mockito}"
 libraries.mysql_connector_java = "mysql:mysql-connector-java:${versions.mysql}"
+libraries.swagger = "io.springfox:springfox-swagger2:${versions.swagger}"
+libraries.swagger_ui = "io.springfox:springfox-swagger-ui:${versions.swagger}"

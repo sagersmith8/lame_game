@@ -3,7 +3,7 @@ package com.github.jsappz.lamegame.server.database.actions;
 import com.github.jsappz.lamegame.server.database.DatabaseConfig;
 import com.github.jsappz.lamegame.server.database.DatabaseManager;
 import com.github.jsappz.lamegame.server.database.dialects.StandardDialect;
-import com.github.jsappz.lamegame.server.model.User;
+import com.github.jsappz.lamegame.model.User;
 import org.junit.Before;
 import org.junit.Test;
 

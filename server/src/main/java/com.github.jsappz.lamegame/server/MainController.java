@@ -1,6 +1,6 @@
 package com.github.jsappz.lamegame.server;
 
-import com.github.jsappz.lamegame.server.model.User;
+import com.github.jsappz.lamegame.model.User;
 import com.github.jsappz.lamegame.server.response.UserResponseProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

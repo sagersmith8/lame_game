@@ -1,10 +1,9 @@
 package com.github.jsappz.lamegame.server.response.providers;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.github.jsappz.lamegame.server.database.DatabaseManager;
 import com.github.jsappz.lamegame.server.database.actions.UserActions;
-import com.github.jsappz.lamegame.server.model.JsonConverter;
-import com.github.jsappz.lamegame.server.model.User;
+import com.github.jsappz.lamegame.model.JsonConverter;
+import com.github.jsappz.lamegame.model.User;
 import com.github.jsappz.lamegame.server.response.UserResponseProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 
 import static java.util.Objects.requireNonNull;
 

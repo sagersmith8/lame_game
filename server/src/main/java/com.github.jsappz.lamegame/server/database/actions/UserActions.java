@@ -1,7 +1,7 @@
 package com.github.jsappz.lamegame.server.database.actions;
 
 import com.github.jsappz.lamegame.server.database.DatabaseAction;
-import com.github.jsappz.lamegame.server.model.User;
+import com.github.jsappz.lamegame.model.User;
 
 import java.sql.*;
 

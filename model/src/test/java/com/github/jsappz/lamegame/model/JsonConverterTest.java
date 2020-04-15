@@ -1,4 +1,4 @@
-package com.github.jsappz.lamegame.server.model;
+package com.github.jsappz.lamegame.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -7,6 +7,7 @@ import java.io.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
 public class JsonConverterTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

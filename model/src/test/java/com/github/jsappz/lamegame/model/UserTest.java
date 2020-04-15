@@ -1,4 +1,4 @@
-package com.github.jsappz.lamegame.server.model;
+package com.github.jsappz.lamegame.model;
 
 import org.junit.Test;
 

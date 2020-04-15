@@ -1,6 +1,6 @@
 package com.github.jsappz.lamegame.server.response;
 
-import com.github.jsappz.lamegame.server.model.User;
+import com.github.jsappz.lamegame.model.User;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 public interface UserResponseProvider {
